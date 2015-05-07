@@ -34,6 +34,10 @@ public class SequentialSearchST<Key, Value> {
         return size() == 0;
     }
 
+    public boolean contains(Key key){
+        return get(key) != null;
+    }
+
     public Value get(Key key){
         for (Node x = first; x != null; x = x.next){
             if (key.equals(x.key))

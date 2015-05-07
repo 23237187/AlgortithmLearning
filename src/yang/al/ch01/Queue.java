@@ -13,8 +13,14 @@ public class Queue<Item> implements Iterable<Item> {
         Node next;
     }
 
+    public Queue() {
+        first = null;
+        last  = null;
+        N = 0;
+    }
+
     public boolean isEmpty(){
-        return first == last;
+        return N == 0;
     }
 
     public int size(){
