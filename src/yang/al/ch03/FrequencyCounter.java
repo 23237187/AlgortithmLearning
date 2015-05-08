@@ -2,13 +2,12 @@ package yang.al.ch03;
 
 
 import yang.al.stdlib.In;
-import yang.al.stdlib.StdIn;
 import yang.al.stdlib.StdOut;
 
 public class FrequencyCounter {
     public static void main(String[] args) {
         int minlen = Integer.parseInt(args[0]);
-        SequentialSearchST<String, Integer> st = new SequentialSearchST<String, Integer>();
+        BST<String, Integer> st = new BST<String, Integer>();
         In inputfile = new In("/home/yang/tale.txt");
         while (!inputfile.isEmpty()){
             String word = inputfile.readString();

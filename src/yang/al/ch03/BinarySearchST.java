@@ -4,9 +4,14 @@ package yang.al.ch03;
 import yang.al.ch01.Queue;
 
 public class BinarySearchST<Key extends Comparable<Key>, Value> {
+    private static final int INIT_CAPACITY = 2;
     private Key[] keys;
     private Value[] vals;
     private int N;
+
+    public BinarySearchST(){
+        this(INIT_CAPACITY);
+    }
 
     public BinarySearchST(int capacity){
         keys = (Key[]) new Comparable[capacity];
@@ -63,6 +68,10 @@ public class BinarySearchST<Key extends Comparable<Key>, Value> {
         if (i < N && keys[i].compareTo(key) == 0){
             vals[i] = val;
             return;
+        }
+
+        if (N == keys.length) {
+            resize(2*keys.length);
         }
         for (int j = N; j > i; j--){
             keys[j] = keys[j-1];
@@ -137,5 +146,9 @@ public class BinarySearchST<Key extends Comparable<Key>, Value> {
             q.enqueue(keys[rank(hi)]);
         }
         return q;
+    }
+
+    public Iterable<Key> keys(){
+        return keys(min(), max());
     }
 }
