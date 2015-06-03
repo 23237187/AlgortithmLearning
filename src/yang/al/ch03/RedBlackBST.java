@@ -70,9 +70,9 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     private void flipColors(Node h) {
-        h.color = RED;
-        h.left.color = BLACK;
-        h.right.color = BLACK;
+        h.color = !h.color;
+        h.left.color = !h.left.color;
+        h.right.color = !h.right.color;
     }
 
     public Value get(Key key) {
@@ -114,7 +114,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         if (isRed(h.right) && !isRed(h.left)) {
             h = rotateLeft(h);
         }
-        if (isRed(h.left) && !isRed(h.left.left)) {
+        if (isRed(h.left) && isRed(h.left.left)) {
             h = rotateRight(h);
         }
         if (isRed(h.left) && isRed(h.right)) {
@@ -139,10 +139,75 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         if (h.left == null)
             return null;
 
-        if (!isRed(h.left) && !isRed(h.right.left)) {
+        if (!isRed(h.left) && !isRed(h.left.left)) {
             h = moveRedLeft(h);
         }
         h.left = deleteMin(h.left);
+        return balance(h);
+    }
+
+    public void deleteMax() {
+        if (isEmpty()) throw new NoSuchElementException("BST underflow");
+
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+
+        root = deleteMax(root);
+        if (!isEmpty()) root.color = BLACK;
+    }
+
+    private Node deleteMax(Node h) {
+        if (isRed(h.left)) {
+            h = rotateRight(h);
+        }
+
+        if (h.right == null)
+            return null;
+
+        if (!isRed(h.right) && !isRed(h.right.left)) {
+            h = moveRedRight(h);
+        }
+        h.right = deleteMax(h.right);
+        return balance(h);
+    }
+
+    public void delete(Key key) {
+        if (!contains(key)) {
+            System.err.println("symbol table does not contain " + key);
+            return;
+        }
+
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+        root = delete(root, key);
+        if (!isEmpty())
+            root.color = BLACK;
+    }
+
+    private Node delete(Node h, Key key) {
+        if (key.compareTo(h.key) < 0) {
+            if (!isRed(h.left) && !isRed(h.left.left)) {
+                h = moveRedLeft(h);
+            }
+            h.left = delete(h.left, key);
+        } else {
+            if (isRed(h.left)) {
+                h = rotateRight(h);
+            }
+            if (key.compareTo(h.key) == 0 && (h.right == null)) {
+                return null;
+            }
+            if (!isRed(h.right) && !isRed(h.right.left)) {
+                h = moveRedRight(h);
+            }
+            if (key.compareTo(h.key) == 0) {
+                h.val = get(h.right, min(h.right).key);
+                h.key = min(h.right).key;
+                h.right = deleteMin(h.right);
+            } else {
+                h.right = delete(h.right, key);
+            }
+        }
         return balance(h);
     }
 
@@ -155,6 +220,52 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         }
         return h;
     }
+
+    private Node moveRedRight(Node h) {
+        flipColors(h);
+        if (isRed(h.left.left)) {
+            h = rotateRight(h);
+            flipColors(h);
+        }
+        return h;
+    }
+
+    private Node balance(Node h) {
+        if (isRed(h.right)) {
+            h = rotateLeft(h);
+        }
+        if (isRed(h.left) && isRed(h.left.left)) {
+            h = rotateRight(h);
+        }
+        if (isRed(h.left) && isRed(h.right)) {
+            flipColors(h);
+        }
+
+        h.N = size(h.left) + size(h.right) + 1;
+        return h;
+    }
+
+    public Key min() {
+        if (isEmpty()) return null;
+        return min(root).key;
+    }
+
+    private Node min(Node x) {
+        if (x.left == null) return x;
+        else return min(x.left);
+    }
+
+    public Key max() {
+        if (isEmpty()) return null;
+        return max(root).key;
+    }
+
+    private Node max(Node x) {
+        if (x.right == null) return x;
+        else return max(x.right);
+    }
+
+
 
 
 
