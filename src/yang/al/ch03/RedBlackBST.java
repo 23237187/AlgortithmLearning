@@ -190,7 +190,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
                 h = moveRedLeft(h);
             }
             h.left = delete(h.left, key);
-        } else {
+        } else {//key >= h
             if (isRed(h.left)) {
                 h = rotateRight(h);
             }
@@ -212,9 +212,11 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     private Node moveRedLeft(Node h) {
-        flipColors(h);
-        if (isRed(h.right.left)) {
-            h.right = rotateRight(h.right);
+        //进入此处,左侧必然为2节点
+        //h一定是红节点,且它的下层一定为黑(左2-节点, 右2/3)
+        flipColors(h);//h的下层又是2节点,转换颜色即可(左h右构成4-节点,向上层的红连接变黑);若不是,则需要移动结构
+        if (isRed(h.right.left)) {//遇见的红节点一定是是3-节点(按标准,无4-节点)
+            h.right = rotateRight(h.right);//原操作位上的节点不是最小的,需要把较小节点移到操作位
             h = rotateLeft(h);
             flipColors(h);
         }
@@ -222,8 +224,10 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     private Node moveRedRight(Node h) {
+        //进入此处,右侧必然为2节点
         flipColors(h);
-        if (isRed(h.left.left)) {
+        if (isRed(h.left.left)) {//遇见的红节点一定是是3-节点(按标准,无4-节点)
+            //原操作位上已经是最大节点,无需地洞操作位
             h = rotateRight(h);
             flipColors(h);
         }
