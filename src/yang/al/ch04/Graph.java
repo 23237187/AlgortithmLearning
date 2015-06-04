@@ -1,6 +1,7 @@
 package yang.al.ch04;
 
 import yang.al.ch01.Bag;
+import yang.al.ch01.Stack;
 import yang.al.stdlib.In;
 
 /**
@@ -12,6 +13,7 @@ public class Graph {
     private Bag<Integer>[] adj;
 
     public Graph(int V) {
+        if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
         this.V = V;
         this.E = 0;
         adj = (Bag<Integer>[]) new Bag[V];
@@ -22,10 +24,25 @@ public class Graph {
     public Graph(In in) {
         this(in.readInt());
         int E = in.readInt();
+        if (E < 0) throw new IllegalArgumentException("Number of edges must be nonnegative");
         for (int i = 0; i < E; i++) {
             int v = in.readInt();
             int w = in.readInt();
             addEdge(v, w);
+        }
+    }
+
+    public Graph(Graph G) {
+        this(G.V());
+        this.E = G.E();
+        for (int v = 0; v < G.V(); v++) {
+            Stack<Integer> reverse = new Stack<Integer>();
+            for (int w : G.adj[v]) {
+                reverse.push(w);
+            }
+            for (int w: reverse) {
+                adj[v].add(w);
+            }
         }
     }
 

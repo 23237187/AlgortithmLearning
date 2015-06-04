@@ -191,12 +191,15 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
             }
             h.left = delete(h.left, key);
         } else {//key >= h
+            //首先将左规范转化为右规范，这样可以复用左规范的检测思路
             if (isRed(h.left)) {
                 h = rotateRight(h);
             }
+            //右节点为null，一定处于2-3树最底层
             if (key.compareTo(h.key) == 0 && (h.right == null)) {
                 return null;
             }
+            //检测右结点是否为2节点
             if (!isRed(h.right) && !isRed(h.right.left)) {
                 h = moveRedRight(h);
             }
@@ -205,6 +208,9 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
                 h.key = min(h.right).key;
                 h.right = deleteMin(h.right);
             } else {
+                //传递递归，不对当前h进行操作：1.当前h为红键前端（h黑，h右为红） 2.h为红后端，且右子为红前端
+                //传递：定义为不改变结构，直接向下传递递归
+                //视比较大小向左向右传播，沿红键方向传播，最多容忍一次红键中断
                 h.right = delete(h.right, key);
             }
         }
@@ -227,7 +233,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         //进入此处,右侧必然为2节点
         flipColors(h);
         if (isRed(h.left.left)) {//遇见的红节点一定是是3-节点(按标准,无4-节点)
-            //原操作位上已经是最大节点,无需地洞操作位
+            //原操作位上已经是最大节点,无需移动操作位
             h = rotateRight(h);
             flipColors(h);
         }
@@ -235,12 +241,15 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     private Node balance(Node h) {
+        //转化为左规范
         if (isRed(h.right)) {
             h = rotateLeft(h);
         }
+        //去除直线4-节点
         if (isRed(h.left) && isRed(h.left.left)) {
             h = rotateRight(h);
         }
+        //去除角4-节点
         if (isRed(h.left) && isRed(h.right)) {
             flipColors(h);
         }
