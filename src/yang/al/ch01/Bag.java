@@ -3,6 +3,7 @@ package yang.al.ch01;
 import java.util.Iterator;
 
 public class Bag<Item> implements Iterable<Item> {
+    private int N;
     private Node first;
     private class Node{
         Item item;
@@ -13,6 +14,11 @@ public class Bag<Item> implements Iterable<Item> {
         first = new Node();
         first.item = item;
         first.next = oldfirst;
+        N++;
+    }
+
+    public int size() {
+        return N;
     }
     public Iterator<Item> iterator(){
         return new ListIterator();
