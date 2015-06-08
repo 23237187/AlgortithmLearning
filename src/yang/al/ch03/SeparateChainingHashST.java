@@ -5,18 +5,18 @@ import yang.al.ch01.Queue;
 /**
  * Created by root on 15-6-3.
  */
-public class SepaSeparateChainingHashST<Key, Value> {
+public class SeparateChainingHashST<Key, Value> {
     private static final int INIT_CAPACITY = 4;
 
     private int N;
     private int M;
     private SequentialSearchST<Key, Value>[] st;
 
-    public SepaSeparateChainingHashST(){
+    public SeparateChainingHashST(){
         this(INIT_CAPACITY);
     }
 
-    public SepaSeparateChainingHashST(int M) {
+    public SeparateChainingHashST(int M) {
         this.M = M;
         st = (SequentialSearchST<Key, Value>[]) new SequentialSearchST[M];
         for (int i = 0; i < M; i++)
@@ -24,7 +24,7 @@ public class SepaSeparateChainingHashST<Key, Value> {
     }
 
     private void resize(int chains) {
-        SepaSeparateChainingHashST<Key, Value> temp = new SepaSeparateChainingHashST<Key, Value>(chains);
+        SeparateChainingHashST<Key, Value> temp = new SeparateChainingHashST<Key, Value>(chains);
         for (int i = 0; i < M; i++) {
             for (Key key : st[i].keys()) {
                 temp.put(key, st[i].get(key));
