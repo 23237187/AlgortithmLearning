@@ -20,5 +20,23 @@ public class KosarajuSharirSCC {
         }
     }
 
-    private void dfs(Digraph G, int v)
+    private void dfs(Digraph G, int v) {
+        marked[v] = true;
+        id[v] = count;
+        for (int w: G.adj(v)) {
+            if (!marked[w]) dfs(G, w);
+        }
+    }
+
+    public int count() {
+        return count;
+    }
+
+    public boolean stronglyConnected(int v, int w) {
+        return id[v] == id[w];
+    }
+
+    public int id(int v) {
+        return id[v];
+    }
 }
