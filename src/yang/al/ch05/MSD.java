@@ -66,6 +66,7 @@ public class MSD {
         a[j] = temp;
     }
 
+    //比较d位及其以后的全部位，即返回的是整体字符串大小比较结果，而不是某一位的大小比较结果
     private static boolean less(String v, String w, int d) {
         for (int i = d; i < Math.min(v.length(), w.length()); i++) {
             if (v.charAt(i) < w.charAt(i)) return true;
