@@ -29,7 +29,7 @@ public class Bag<Item> implements Iterable<Item> {
             return current != null;
         }
         public void remove(){
-
+            throw new UnsupportedOperationException();
         }
         public Item next(){
             Item item = current.item;

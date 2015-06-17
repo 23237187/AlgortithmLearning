@@ -6,6 +6,8 @@ import java.util.NoSuchElementException;
 /**
  * Created by root on 15-6-8.
  */
+//（index， key）对
+//按key的大小排列堆，但是在队列数组中仅存储index， 插入读取或排序时再按照keys数组将index映射成key
 public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer> {
     private int NMAX;        // maximum number of elements on PQ
     private int N;           // number of elements on PQ
